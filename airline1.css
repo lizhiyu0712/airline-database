@@ -1,0 +1,23 @@
+h1 {
+    color:blueviolet;
+    font-size: 30px;
+}
+
+body {
+    background-color:aquamarine;
+}
+
+form{
+    font-size: 30px;
+}
+
+img{
+    alt: "Airplane";
+    position: absolute;
+    right: 150px;
+    width: 800px;
+    height: 350px;
+    border-style: solid;
+    border-color: coral;
+    border-width: 20px;
+}

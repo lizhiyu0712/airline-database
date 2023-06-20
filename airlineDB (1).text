@@ -1,0 +1,150 @@
+drop database airlineDB;
+
+create database airlineDB;
+
+CREATE TABLE Airline(
+AirlineName 		VARCHAR(20)	NOT NULL,
+AirlineCode		CHAR(2)		NOT NULL,
+PRIMARY KEY(AirlineCode));
+
+CREATE TABLE Airport(
+AirportName 		VARCHAR(40)		NOT NULL,
+AirportCity		VARCHAR(15),
+AirportProvince		VARCHAR(15),
+AirportCode		CHAR(3)			NOT NULL,
+PRIMARY KEY(AirportCode));
+
+CREATE TABLE AirplaneType(
+AirplaneTypeName 		VARCHAR(15)		NOT NULL,
+AirplaneTypeMaxSeat		CHAR(6),
+AirplaneTypeCompanyName	VARCHAR(30),
+PRIMARY KEY(AirplaneTypeName));	
+
+CREATE TABLE Airplane(
+AirplaneId 		VARCHAR(20)		NOT NULL,
+AirplaneBuildYear		CHAR(4),
+AirlineCode		CHAR(2)		NOT NULL,
+AirplaneTypeName		VARCHAR(15)		NOT NULL,
+PRIMARY KEY(AirplaneId),
+FOREIGN KEY(AirlineCode) REFERENCES Airline(AirlineCode)
+on delete cascade,
+FOREIGN KEY(AirplaneTypeName) REFERENCES
+AirplaneType(AirplaneTypeName)
+on delete cascade);
+
+CREATE TABLE Flight(
+FlightNumber		CHAR(3)		NOT NULL,
+AirlineCode		CHAR(2)		NOT NULL,
+ActualArriveTime			TIME,
+SchduledArriveTime		TIME,
+ActualDepartureTime		TIME,
+SchduledDepartureTime		TIME,
+ArrivalAirport char(3) not null,
+DepartureAirport char(3) not null,
+AirplaneId 		VARCHAR(20)		NOT NULL,
+PRIMARY KEY(FlightNumber,AirlineCode),
+FOREIGN KEY(AirlineCode) REFERENCES Airline(AirlineCode)
+on delete cascade,
+foreign key (arrivalAirport) references Airport (AirportCode) on delete cascade,
+foreign key (departureAirport) references Airport (AirportCode) on delete cascade,
+FOREIGN KEY(AirplaneId) REFERENCES Airplane(AirplaneId)
+on delete cascade);
+
+CREATE TABLE Handles(
+AirportCode		CHAR(3)		NOT NULL,
+AirplaneTypeName 		VARCHAR(15)	NOT NULL,
+PRIMARY KEY(AirportCode,AirplaneTypeName),
+FOREIGN KEY(AirportCode) REFERENCES Airport(AirportCode)
+on delete cascade,
+FOREIGN KEY(AirplaneTypeName) REFERENCES
+AirplaneType(AirplaneTypeName)
+on delete cascade);
+
+CREATE TABLE OfferedDate(
+FlightNumber		CHAR(3)		NOT NULL,
+AirlineCode		CHAR(2)		NOT NULL,
+OfferedDate				CHAR(10),
+PRIMARY KEY(FlightNumber,AirlineCode,OfferedDate),
+FOREIGN KEY(FlightNumber) REFERENCES Flight(FlightNumber)
+on delete cascade,
+FOREIGN KEY(AirlineCode) REFERENCES Airline(AirlineCode)
+on delete cascade);
+
+insert into Airline values
+('Air Canada','AC'),
+('American Airlines','AA'),
+('Air China','CA'),
+('Air France','AF')
+;
+
+insert into Airport values
+('Los Angeles International Airport','Los Angeles','California','LAX'),
+('Beijing Capital International Airport','Beijing','Beijing','PEK'),
+('Toronto Pearson International Airport','Toronto','Ontario','YYZ'),
+('Shanghai Pudong International Airport','Shanghai','Shanghai','PVG'),
+('Vancouver International Airport','Vancouver','British Columbia','YVR')
+;
+
+insert into AirplaneType values
+('Boeing777','368','Boeing Commercial Airplanes'),
+('Boeing747','366','Boeing Commercial Airplanes'),
+('AirbusA320','180','Airbus'),
+('BombardierCRJ700','74','Bombardier')
+;
+
+insert into Airplane values
+('N930NN','2010','AC','AirbusA320'),
+('N4616S','2004','AF','AirbusA320'),
+('G-BNKH','1996','AF','Boeing747'),
+('N973JM','1997','AC','Boeing747'),
+('G-KELS','2009','AC','BombardierCRJ700'),
+('N98299','2008','AA','AirbusA320'),
+('C-GTFO','2003','AF','Boeing777'),
+('N98710','2017','AA','AirbusA320'),
+('N340LV','2012','CA','AirbusA320'),
+('N904DE','1999','CA','Boeing747'),
+('N429CP','2014','CA','Boeing777'),
+('ZS-PMK','2001','AA','BombardierCRJ700')
+;
+
+insert into Flight values
+('074','AC','20:30:00','20:30:00','21:20:25','21:25:00','LAX','PVG','N4616S'),
+('085','CA','02:30:00','03:00:00','5:20:00','6:00:00','YVR','YYZ','N98299'),
+('045','AA','15:10:00','15:10:00','16:20:00','16:10:00','YYZ','PEK','N973JM'),
+('082','AF','22:00:00','22:30:00','22:40:00','22:50:00','YVR','LAX','N4616S'),
+('012','AC','05:50:00','05:50:00','7:40:00','7:25:00','PEK','PVG','N429CP')
+;
+
+insert into Handles values
+('YVR','BombardierCRJ700'),
+('LAX','AirbusA320'),
+('YYZ','Boeing777'),
+('LAX','Boeing777'),
+('PVG','Boeing777'),
+('PEK','AirbusA320'),
+('PEK','BombardierCRJ700'),
+('YYZ','Boeing747'),
+('YVR','Boeing747'),
+('PVG','AirbusA320')
+;
+
+insert into OfferedDate values
+('045','AA','Wednesday'),
+('082','AF','Sunday'), 
+('082','CA','Wednesday'),
+('082','AF','Saturday'),
+('085','CA','Friday'),
+('012','AC','Tuesday'),
+('012','AC','Monday'),
+('082','AF','Friday'),
+('074','AA','Thursday'),
+('085','AC','Wednesday')
+;
+
+
+
+
+
+
+
+
